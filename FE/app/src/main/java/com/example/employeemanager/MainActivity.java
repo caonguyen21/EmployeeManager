@@ -3,13 +3,12 @@ package com.example.employeemanager;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.employeemanager.ui.TaiKhoanFragment;
 import com.example.employeemanager.ui.NhanVienFragment;
+import com.example.employeemanager.ui.TaiKhoanFragment;
 import com.example.employeemanager.ui.TrangChuFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -20,7 +19,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        TrangChuFragment trangChuFragment = new TrangChuFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, trangChuFragment)
+                .commit();
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.getBoolean("addSuccess")) {
             showFragment();
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void showFragment() {
         NhanVienFragment nhanVienFragment = new NhanVienFragment();
         getSupportFragmentManager().beginTransaction()

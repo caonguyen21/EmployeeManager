@@ -13,8 +13,54 @@
             android:id="@+id/toolbar_trangchu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/baseline_qr_code_scanner_24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:text="Scan the QR code for attendance"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/scanQr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:text="Tap here to scan"
+                android:textColor="#039BE5"
+                android:textSize="16dp" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

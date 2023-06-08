@@ -38,7 +38,7 @@ public interface ApiService {
     Call<TaiKhoan> thongtintaikhoan(@Path("id") String ID);
 
     @PUT("TaiKhoan/{id}")
-    Call<TaiKhoan> updateTaiKhoan(@Path("id") String ID, @Body TaiKhoan updateTaiKhoan);
+    Call<TaiKhoan> updateTaiKhoan(@Path("id") String id, @Body TaiKhoan updateTaiKhoan);
 
     @POST("TaiKhoan/login")
     Call<TaiKhoan> Login(@Body TaiKhoan taiKhoan);

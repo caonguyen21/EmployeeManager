@@ -13,12 +13,12 @@ public class TaiKhoan implements Serializable {
     private Date NgayTao;
     private String HoTen;
 
-    public TaiKhoan(String taiKhoan, String email, String hoTen) {
-        TaiKhoan = taiKhoan;
-        Email = email;
+    public TaiKhoan(String hoTen, String email, boolean phanQuyen, boolean trangThai) {
         HoTen = hoTen;
+        Email = email;
+        PhanQuyen = phanQuyen;
+        TrangThai = trangThai;
     }
-
 
     public TaiKhoan(String taiKhoan, String matKhau, String email, String hoTen) {
         TaiKhoan = taiKhoan;
@@ -32,12 +32,6 @@ public class TaiKhoan implements Serializable {
     }
 
     public TaiKhoan() {
-    }
-
-    public TaiKhoan(boolean phanQuyen, boolean trangThai, String hoTen) {
-        PhanQuyen = phanQuyen;
-        TrangThai = trangThai;
-        HoTen = hoTen;
     }
 
 

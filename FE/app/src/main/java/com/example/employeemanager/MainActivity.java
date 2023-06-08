@@ -24,8 +24,12 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, trangChuFragment)
                 .commit();
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.getBoolean("addSuccess")) {
-            showFragment();
+        if (extras != null) {
+            if (extras.getBoolean("addSuccess")) {
+                showFragmentNhanVien();
+            } else if (extras.getBoolean("defaultFragment")) {
+                showFragmentTrangChu();
+            }
         }
 
         // Thiết lập listener cho BottomNavigationView
@@ -35,22 +39,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menuHome:
-                        TrangChuFragment trangChuFragment = new TrangChuFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, trangChuFragment)
-                                .commit();
+                        showFragmentTrangChu();
                         return true;
                     case R.id.menuNhanVien:
-                        NhanVienFragment nhanVienFragment = new NhanVienFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, nhanVienFragment)
-                                .commit();
+                        showFragmentNhanVien();
                         return true;
                     case R.id.menuTaiKhoan:
-                        TaiKhoanFragment taiKhoanFragment = new TaiKhoanFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, taiKhoanFragment)
-                                .commit();
+                        showFragmentTaiKhoan();
                         return true;
                 }
                 return false;
@@ -58,10 +53,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void showFragment() {
+    public void showFragmentTrangChu() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.getMenu().findItem(R.id.menuHome).setChecked(true);
+
+        TrangChuFragment trangChuFragment = new TrangChuFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, trangChuFragment)
+                .commit();
+    }
+
+    public void showFragmentNhanVien() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.getMenu().findItem(R.id.menuNhanVien).setChecked(true);
+
         NhanVienFragment nhanVienFragment = new NhanVienFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, nhanVienFragment)
+                .commit();
+    }
+
+    public void showFragmentTaiKhoan() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.getMenu().findItem(R.id.menuTaiKhoan).setChecked(true);
+
+        TaiKhoanFragment taiKhoanFragment = new TaiKhoanFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, taiKhoanFragment)
                 .commit();
     }
 }

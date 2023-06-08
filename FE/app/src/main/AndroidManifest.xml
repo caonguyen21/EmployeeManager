@@ -20,6 +20,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".function.UpdateInfor"
+            android:exported="false" />
+        <activity
+            android:name=".function.ChangePassword"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
@@ -37,17 +43,11 @@
             android:exported="true" />
         <activity
             android:name=".function.Login"
-            android:exported="true">
-
-        </activity>
-
+            android:exported="true" />
         <activity
             android:name=".function.Register"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity android:name=".function.CustomScannerActivity" />
-
     </application>
 
 </manifest>

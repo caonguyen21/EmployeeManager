@@ -1,6 +1,7 @@
 package com.example.employeemanager.ui;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -8,6 +9,7 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -41,12 +43,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.employeemanager.MainActivity;
 import com.example.employeemanager.R;
 import com.example.employeemanager.adapter.NhanVienAdapter;
 import com.example.employeemanager.api.ApiService;
 import com.example.employeemanager.function.AddNhanVien;
 import com.example.employeemanager.function.SwipeOptionsCallback;
 import com.example.employeemanager.model.NhanVien;
+import com.example.employeemanager.model.TaiKhoan;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -60,11 +64,13 @@ import retrofit2.Response;
 public class NhanVienFragment extends Fragment implements NhanVienAdapter.OnSwipeListener {
     private static final int PICK_IMAGE_PERMISSION_REQUEST_CODE = 1;
     private static final int PICK_IMAGE_REQUEST = 2;
+    private static final String MY_PREFERENCE_NAME = "USER_ID";
     Toolbar toolbar;
     RecyclerView rcvNhanVien;
     NhanVienAdapter nhanVienAdapter;
     List<NhanVien> listNhanVien;
     FloatingActionButton floatingActionButton;
+    String id = null;
     private ImageView imageView;
     private Uri imageUri;
 
@@ -73,7 +79,9 @@ public class NhanVienFragment extends Fragment implements NhanVienAdapter.OnSwip
         view = inflater.inflate(R.layout.fragment_nhan_vien, container, false);
         init(view);
         toolBar();
-        getAllNhanVien();
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(MY_PREFERENCE_NAME, MODE_PRIVATE);
+        id = sharedPreferences.getString("value", "");
+        getTaiKhoanFromData(id);
         initGridView();
         addNhanVien();
         // Lấy reference đến BottomNavigationView
@@ -139,7 +147,6 @@ public class NhanVienFragment extends Fragment implements NhanVienAdapter.OnSwip
                         resetRecyclerView(); // Thiết lập lại RecyclerView
                         listNhanVien.addAll(newNhanVienList); // Thêm dữ liệu mới vào danh sách
                         nhanVienAdapter.notifyDataSetChanged(); // Thông báo cho RecyclerView hiển thị dữ liệu mới
-                        Log.e("Size", String.valueOf(listNhanVien.size()));
                     }
                 }
             }
@@ -149,6 +156,52 @@ public class NhanVienFragment extends Fragment implements NhanVienAdapter.OnSwip
                 // Xử lý lỗi khi gọi API thất bại
             }
         });
+    }
+
+    private void getTaiKhoanFromData(String id) {
+        ApiService.apiService.thongtintaikhoan(id).enqueue(new Callback<TaiKhoan>() {
+            @Override
+            public void onResponse(@NonNull Call<TaiKhoan> call, @NonNull Response<TaiKhoan> response) {
+                TaiKhoan taiKhoan = response.body();
+                if (taiKhoan != null) {
+                    if (!taiKhoan.isPhanQuyen()) {
+                        showNoAccessDialog();
+                    } else {
+                        getAllNhanVien();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TaiKhoan> call, @NonNull Throwable t) {
+                Log.e("Thông tin tài khoản: ", t.toString());
+            }
+        });
+    }
+
+    private void showNoAccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Lỗi truy cập");
+        builder.setMessage("Bạn không có quyền truy cập.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("defaultFragment", true); // Fragment mặc định là TrangChuFragment
+                startActivity(intent);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Set button text color
+        Button okButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        if (okButton != null) {
+            okButton.setTextColor(Color.BLACK);
+        } else {
+            Log.e("DialogButtons", "Positive button not found.");
+        }
     }
 
     public void onLeftSwipe(int position) {
